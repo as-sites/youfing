@@ -11,8 +11,31 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
+const routes: Record<string, string> = {
+	muppet: 'muppet.jpg',
+	legend: 'legend.jpg',
+}
+
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
-		return new Response('Hello World!');
+		const url = new URL(request.url);
+		const path = url.pathname.replace(/\/$/, '');
+
+		if (routes[path]) {
+			const img = await env.imgBucket.get(routes[path]);
+
+			if (!img) {
+				return new Response('Image could not be found in bucket.', { status: 404 });
+			}
+
+			return new Response(img.body, {
+				headers: {
+					'Content-Type': img.httpMetadata?.contentType ?? 'image/jpeg',
+					'Content-Length': img.size.toString(),
+				},
+			});
+		}
+
+		return new Response('Route not found', { status: 404 });
 	},
 } satisfies ExportedHandler<Env>;
