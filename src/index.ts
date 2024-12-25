@@ -19,7 +19,7 @@ const routes: Record<string, string> = {
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
 		const url = new URL(request.url);
-		const path = url.pathname.replace(/\/$/, '');
+		const path = url.pathname.replace(/^\//, '');
 
 		if (routes[path]) {
 			const img = await env.imgBucket.get(routes[path]);
