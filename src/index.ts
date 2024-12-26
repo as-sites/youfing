@@ -22,7 +22,11 @@ export default {
 		const path = url.pathname.replace(/^\//, '');
 
 		if (routes[path]) {
-			const img = await env.imgBucket.get(routes[path]);
+			const img = await env.imgBucket.get(routes[path]) 
+				?? await env.imgBucket.get(`${path}.jpg`) 
+				?? await env.imgBucket.get(`${path}.jpeg`) 
+				?? await env.imgBucket.get(`${path}.png`) 
+				?? await env.imgBucket.get(`${path}.gif`);
 
 			if (!img) {
 				return new Response('Image could not be found in bucket.', { status: 404 });
