@@ -14,32 +14,29 @@
 const routes: Record<string, string> = {
 	muppet: 'muppet.jpg',
 	legend: 'legend.jpg',
-}
+};
 
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
 		const url = new URL(request.url);
 		const path = url.pathname.replace(/^\//, '');
 
-		if (routes[path]) {
-			const img = await env.imgBucket.get(routes[path]) 
-				?? await env.imgBucket.get(`${path}.jpg`) 
-				?? await env.imgBucket.get(`${path}.jpeg`) 
-				?? await env.imgBucket.get(`${path}.png`) 
-				?? await env.imgBucket.get(`${path}.gif`);
+		const img =
+			(routes[path] ? await env.imgBucket.get(routes[path]) : null) ??
+			(await env.imgBucket.get(`${path}.jpg`)) ??
+			(await env.imgBucket.get(`${path}.jpeg`)) ??
+			(await env.imgBucket.get(`${path}.png`)) ??
+			(await env.imgBucket.get(`${path}.gif`));
 
-			if (!img) {
-				return new Response('Image could not be found in bucket.', { status: 404 });
-			}
-
-			return new Response(img.body, {
-				headers: {
-					'Content-Type': img.httpMetadata?.contentType ?? 'image/jpeg',
-					'Content-Length': img.size.toString(),
-				},
-			});
+		if (!img) {
+			return new Response('No matching route or image could be found.', { status: 404 });
 		}
 
-		return new Response('Route not found', { status: 404 });
+		return new Response(img.body, {
+			headers: {
+				'Content-Type': img.httpMetadata?.contentType ?? 'image/jpeg',
+				'Content-Length': img.size.toString(),
+			},
+		});
 	},
 } satisfies ExportedHandler<Env>;
