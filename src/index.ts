@@ -11,9 +11,14 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
+const extensionRoute = (extension: string, paths: string[]) =>
+	paths.reduce<Record<string, string>>((acc, path) => ({ ...acc, [path]: `${path}.${extension}` }), {});
+
+// manually defined routes are faster than trying fallbacks
 const routes: Record<string, string> = {
-	muppet: 'muppet.jpg',
-	legend: 'legend.jpg',
+	...extensionRoute('jpg', ['muppet', 'legend', 'genius']),
+	...extensionRoute('jpeg', ['idiot']),
+	...extensionRoute('gif', ['tool']),
 };
 
 export default {
