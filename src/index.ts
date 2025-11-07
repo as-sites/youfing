@@ -22,7 +22,7 @@ const routes: Record<string, string> = {
 };
 
 export default {
-	async fetch(request, env, ctx): Promise<Response> {
+	async fetch(request, env, _ctx): Promise<Response> {
 		const url = new URL(request.url);
 		const path = url.pathname.replace(/^\//, '');
 

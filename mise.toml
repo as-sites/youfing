@@ -1,0 +1,19 @@
+[tools]
+node = "24"
+npm = "11"
+
+
+[env]
+_.path = "{{config_root}}/node_modules/.bin"
+
+[tasks]
+deploy = 'wrangler deploy'
+'test:watch' = 'vitest --watch'
+'test' = 'vitest --run'
+typegen = 'wrangler types'
+'typecheck:worker' = 'tsc --noEmit --project tsconfig.json'
+'typecheck:test' = 'tsc --noEmit --project test/tsconfig.json'
+
+[tasks.dev]
+run = 'wrangler dev'
+alias = 'start'
