@@ -12,7 +12,6 @@
  */
 
 const extensionRoute = (extension: string, paths: string[]) =>
-	// paths.reduce<Record<string, string>>((acc, path) => ({ ...acc, [path]: `${path}.${extension}` }), {});
 	paths.reduce<Record<string, string>>(
 		(acc, path) => Object.assign(acc, { [path]: `${path}.${extension}`, [`${path}.${extension}`]: `${path}.${extension}` }),
 		{},
@@ -23,6 +22,7 @@ const routes: Record<string, string> = {
 	...extensionRoute('jpg', ['muppet', 'legend', 'genius']),
 	...extensionRoute('jpeg', ['idiot']),
 	...extensionRoute('gif', ['tool']),
+	...extensionRoute('png', ['sexy']),
 };
 
 export default {
