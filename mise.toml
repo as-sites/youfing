@@ -2,6 +2,7 @@
 node = "24"
 npm = "11"
 
+# comment 1
 
 [env]
 _.path = "{{config_root}}/node_modules/.bin"
