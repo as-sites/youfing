@@ -12,7 +12,11 @@
  */
 
 const extensionRoute = (extension: string, paths: string[]) =>
-	paths.reduce<Record<string, string>>((acc, path) => ({ ...acc, [path]: `${path}.${extension}` }), {});
+	// paths.reduce<Record<string, string>>((acc, path) => ({ ...acc, [path]: `${path}.${extension}` }), {});
+	paths.reduce<Record<string, string>>(
+		(acc, path) => Object.assign(acc, { [path]: `${path}.${extension}`, [`${path}.${extension}`]: `${path}.${extension}` }),
+		{},
+	);
 
 // manually defined routes are faster than trying fallbacks
 const routes: Record<string, string> = {
