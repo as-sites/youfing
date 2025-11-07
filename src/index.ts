@@ -34,7 +34,7 @@ export default {
 			(await env.imgBucket.get(`${path}.gif`));
 
 		if (!img) {
-			return new Response('No matching route or image could be found.', { status: 404 });
+			return new Response('No matching route or image could be found', { status: 404 });
 		}
 
 		return new Response(img.body, {
